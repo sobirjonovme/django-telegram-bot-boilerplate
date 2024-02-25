@@ -201,6 +201,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # TELEGRAM BOT settings
 HOST = env.str("HOST", "http://localhost:8000")
+RUN_BOT_CELERY = env.bool("RUN_BOT_CELERY", False)
 BOT_TOKEN = env.str("BOT_TOKEN", "")
 BOT_SECRET_KEY = env.str("BOT_SECRET_KEY", "")
 TELEGRAM_LOGS_CHAT_ID = env.str("TELEGRAM_LOGS_CHAT_ID", "")
