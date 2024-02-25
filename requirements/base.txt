@@ -1,0 +1,34 @@
+pytz
+requests
+python-environ==0.4.54
+
+ipython==8.10.0  # enhanced python interpreter
+
+# Django
+Django==4.2.10
+django-cors-headers==4.3.1
+django-debug-toolbar==3.6.0
+whitenoise==6.2.0  # for serving static files
+django-solo==2.2.0
+Pillow==10.2.0
+django-modeltranslation==0.18.11
+django-jazzmin==2.6.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+drf-yasg==1.21.7
+
+# Django async requirements
+gunicorn==21.2.0
+uvicorn==0.27.1
+
+# Databases
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+
+# Distributed async tasks
+celery==5.3.6
+redis==5.0.1
+django-celery-beat==2.5.0
+
+# Telegram
+python-telegram-bot==13.15  # last sync version
