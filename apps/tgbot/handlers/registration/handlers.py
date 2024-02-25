@@ -9,7 +9,7 @@ from apps.tgbot.models import TelegramProfile
 
 @get_user
 def command_start(update: Update, context: CallbackContext, user: TelegramProfile):
-
+    print(context.user_data)
     update.message.reply_text(
         text=str(_("Assalomu alaykum\n Iltimos, ismingizni kiriting")),
     )
@@ -38,10 +38,11 @@ def set_phone_number(update: Update, context: CallbackContext, user: TelegramPro
     """
     Receives phone number from user
     """
+    print(context.user_data)
 
-    user.full_name = context.user_data["full_name"]
-    user.phone_number = update.message.text
-    user.save()
+    # user.full_name = context.user_data["full_name"]
+    # user.phone_number = update.message.text
+    # user.save()
 
     context.bot.send_message(
         chat_id=update.message.chat_id,
