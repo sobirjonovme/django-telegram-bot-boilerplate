@@ -13,5 +13,5 @@ env.read_env(os.path.join(BASE_DIR, ".env"))
 STAGE = env.str("STAGE", "develop")
 if STAGE == "develop":
     from .develop import *
-elif STAGE == "staging":
+elif STAGE == "production":
     from .production import *
