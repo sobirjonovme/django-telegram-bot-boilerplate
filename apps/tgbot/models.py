@@ -21,3 +21,18 @@ class TelegramProfile(BaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name or ''}"
+
+
+class MandatorySubscription(BaseModel):
+    chat_title = models.CharField(max_length=255)
+    chat_id = models.CharField(max_length=255, unique=True)
+    invite_link = models.CharField(max_length=255, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("Mandatory Subscription")
+        verbose_name_plural = _("Mandatory Subscriptions")
+
+    def __str__(self):
+        return self.chat_title
+

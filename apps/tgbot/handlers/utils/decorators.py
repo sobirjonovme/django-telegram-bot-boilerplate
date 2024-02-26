@@ -8,6 +8,7 @@ from telegram.ext import CallbackContext
 
 from apps.users.models import User
 from apps.tgbot.models import TelegramProfile
+from apps.tgbot.services.subscription import check_if_user_subscribed, send_subscription_required_message
 
 
 def admin_only(func: Callable):
@@ -60,6 +61,24 @@ def get_user(func):
             activate(settings.LANGUAGE_CODE)
         else:
             activate(user.language)
+
+        return func(update, context, user, *args, **kwargs)
+
+    return wrap
+
+
+def subscription_required(func):
+    """
+    Decorator to check if user is subscribed
+
+    This decorator requires `get_user` decorator to be used first
+    """
+
+    def wrap(update, context, user, *args, **kwargs):
+
+        if not check_if_user_subscribed(context.bot, user):
+            send_subscription_required_message(context.bot, user.telegram_id)
+            return
 
         return func(update, context, user, *args, **kwargs)
 

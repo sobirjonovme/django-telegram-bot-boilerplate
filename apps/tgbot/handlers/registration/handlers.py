@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext, ConversationHandler
 from django.utils.translation import gettext as _
 
 from apps.tgbot.handlers.utils.states import state
-from apps.tgbot.handlers.utils.decorators import get_user
+from apps.tgbot.handlers.utils.decorators import get_user, subscription_required
 from apps.tgbot.models import TelegramProfile
 
 
@@ -17,6 +17,7 @@ def command_start(update: Update, context: CallbackContext, user: TelegramProfil
 
 
 @get_user
+@subscription_required
 def set_full_name(update: Update, context: CallbackContext, user: TelegramProfile):
     """
     Receives full name from user

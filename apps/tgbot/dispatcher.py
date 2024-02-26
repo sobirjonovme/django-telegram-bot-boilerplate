@@ -17,6 +17,7 @@ from apps.tgbot.handlers.utils.states import state
 from apps.tgbot.handlers.registration.handlers import (
     command_start, set_full_name, set_phone_number
 )
+from apps.tgbot.handlers.subscription.handlers import check_user_subscription
 from apps.tgbot.main import bot
 
 
@@ -47,8 +48,13 @@ def setup_dispatcher(dp):
     )
 
     # registration
+    dp.add_handler(
+        CallbackQueryHandler(
+            check_user_subscription,
+            pattern="check_subscription",
+        )
+    )
     dp.add_handler(conversation_handler)
-    dp.add_handler(CommandHandler("start", command_start))
 
     # # files
     # dp.add_handler(MessageHandler(
