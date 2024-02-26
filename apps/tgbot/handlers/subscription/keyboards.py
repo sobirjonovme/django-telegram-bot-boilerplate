@@ -34,4 +34,4 @@ def get_subscription_buttons(bot):
         ]
     )
 
-    return InlineKeyboardMarkup(buttons)
+    return True, InlineKeyboardMarkup(buttons)

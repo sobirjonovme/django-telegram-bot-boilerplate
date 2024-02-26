@@ -21,11 +21,13 @@ def send_subscription_required_message(bot, chat_id):
     """
     Sends message to user that subscription is required to use the bot
     """
-    text = _("Iltimos, botdan foydalanish uchun quyidagi kanallarga obuna bo'ling")
-    buttons = get_subscription_buttons(bot)
-    bot.send_message(
-        chat_id=chat_id,
-        text=text,
-        reply_markup=buttons,
-    )
+    exists, buttons = get_subscription_buttons(bot)
+    if exists:
+        text = str(_("Iltimos, botdan foydalanish uchun quyidagi kanallarga obuna bo'ling"))
+        bot.send_message(
+            chat_id=chat_id,
+            text=text,
+            reply_markup=buttons,
+        )
 
+    return False

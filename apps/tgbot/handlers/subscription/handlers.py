@@ -11,8 +11,10 @@ from apps.tgbot.services.subscription import check_if_user_subscribed
 def check_user_subscription(update: Update, context: CallbackContext, user: TelegramProfile):
     status = check_if_user_subscribed(context.bot, user)
     if status:
-        update.message.reply_text(
-            str(_("You are subscribed to the bot. You can use all the features of the bot."))
+        update.callback_query.answer()
+        context.bot.send_message(
+            chat_id=user.telegram_id,
+            text=str(_("You are subscribed to all the required channels. You can use all the features of the bot."))
         )
         return
 
@@ -23,4 +25,3 @@ def check_user_subscription(update: Update, context: CallbackContext, user: Tele
         )),
         show_alert=True
     )
-
