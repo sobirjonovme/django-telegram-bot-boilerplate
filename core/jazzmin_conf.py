@@ -1,22 +1,22 @@
 JAZZMIN_SETTINGS: dict = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "HEAT Warehouse Admin",
+    "site_title": "Admin Site Title",
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "HEAT Warehouse",
+    "site_header": "Admin Site Header",
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "HEAT Warehouse",
+    "site_brand": "Admin Site Brand",
     # Logo to use for your site, must be present in static files, used for brand on top left
     # "site_logo": "assets/img/admin-logo.png",
-    # "login_logo": "assets/img/kapital-qurilish-logo.png",
-    # "login_logo_dark": "assets/img/kapital-qurilish-logo.png",
+    # "login_logo": "assets/img/site-logo.png",
+    # "login_logo_dark": "assets/img/site-logo.png",
     # CSS classes that are applied to the logo above
     "site_logo_classes": "img",
     # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
-    # "site_icon": "assets/img/kapital-qurilish-logo.png",
+    # "site_icon": "assets/img/site-cion.png",
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to HEAT Warehouse Admin",
+    "welcome_sign": "Welcome to Admin",
     # Copyright on the footer
-    "copyright": "sobirjonov me",
+    "copyright": "sobirjonov_me",
     # The model admin to search from the search bar, search bar omitted if excluded
     # "search_model": "",
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
@@ -46,7 +46,7 @@ JAZZMIN_SETTINGS: dict = {
     # Whether to display the side menu
     "show_sidebar": True,
     # Whether to aut expand the menu
-    "navigation_expanded": False,
+    "navigation_expanded": True,
     # Hide these apps when generating side menu e.g (auth)
     "hide_apps": [],
     # Hide these models when generating side menu (e.g auth.user)
@@ -57,49 +57,10 @@ JAZZMIN_SETTINGS: dict = {
     ],
     "icons": {
         # account app
-        "account": "fas fa-users-cog",
-        "account.User": "fas fa-user-friends",
-        # account app
-        "defender": "fas fa-shield-alt",
-        "defender.access_attempt": "fas fa-shield-alt",
+        "users": "fas fa-users-cog",
+        "users.User": "fas fa-user-friends",
         # common app
         "common": "fas fa-cubes",
-        "common.Advertisement": "fas fa-ad",
-        "common.Appeal": "fas fa-newspaper",
-        "common.AppealStatistics": "fas fa-chart-line",
-        "common.Banner": "fas fa-chalkboard",
-        "common.Contact": "fas fa-phone-alt",
-        "common.Department": "fas fa-building",
-        "common.DirectorateMission": "fas fa-clipboard",
-        "common.Footer": "fas fa-file-alt",
-        "common.HomePublicInformation": "fas fa-file",
-        "common.LandingPageSection": "fas fa-list-ol",
-        "common.AntiCorruptionSection": "fas fa-list-ol",
-        "common.Menu": "fas fa-list",
-        "common.SocialNetwork": "fas fa-network-wired",
-        "common.StaticPage": "fas fa-clipboard",
-        "common.UseFullLinks": "fas fa-external-link-alt",
-        "common.WorkingPrinciple": "fas fa-clipboard",
-        "common.SearchModel": "fas fa-search",
-        "common.TelegramMessageConfig": "fas fa-robot",
-        # staff app
-        "staff": "fas fa-users",
-        "staff.Employee": "fas fa-user",
-        "staff.Vacancy": "fas fa-edit",
-        "staff.Candidate": "far fa-file-alt",
-        # news app
-        "news": "far fa-newspaper",
-        "news.NewsCategory": "fas fa-bars",
-        "news.News": "fas fa-newspaper",
-        "news.NewsMedia": "far fa-image",
-        "news.NewsViews": "far fa-eye",
-        "news.Project": "far fa-building",
-        "news.ProjectMedia": "far fa-image",
-        # documents app
-        "documents": "fas fa-file-alt",
-        "documents.Document": "fas fa-file-export",
-        "documents.DocumentType": "fas fa-list",
-        "documents.PublicInformation": "fas fa-file-pdf",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-folder",
@@ -113,10 +74,10 @@ JAZZMIN_SETTINGS: dict = {
     # UI Tweaks #
     #############
     # Relative paths to custom CSS/JS scripts (must be present in static files)
-    "custom_css": "assets/css/main.css",
-    "custom_js": "assets/js/admin.js",
+    # "custom_css": "assets/css/main.css",
+    # "custom_js": "assets/js/admin.js",
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": False,
+    "show_ui_builder": True,
     ###############
     # Change view #
     ###############

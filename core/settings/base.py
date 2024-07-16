@@ -10,12 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from pathlib import Path
+
 import environ
 
-from pathlib import Path
-from datetime import timedelta
-
-# from core.jazzmin_conf import *  # noqa
+from core.jazzmin_conf import *  # noqa
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -48,32 +47,17 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     "apps.common",
-    "apps.tgbot",
+    # "apps.tgbot",
     "apps.users",
 ]
 
 THIRD_PARTY_APPS = [
-    "solo",
-    "rest_framework",
-    "drf_yasg",
     "corsheaders",
     "modeltranslation",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 10,
-    "DEFAULT_THROTTLE_RATES": {"anon": "10/second", "user": "10/second"},
-    "EXCEPTION_HANDLER": "utils.exceptionhandler.custom_exception_handler",
-}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -153,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
-LANGUAGE_CODE = "uz"
+LANGUAGE_CODE = "en"
 
 
 # This function is used to translate language names
@@ -162,9 +146,9 @@ def gettext(s):
 
 
 LANGUAGES = (
-    ("uz", gettext("Uzbek")),
-    # ('en', gettext('English')),
-    # ('ru', gettext('Russian'))
+    # ("uz", gettext("Uzbek")),
+    ("en", gettext("English")),
+    # ("ru", gettext("Russian"))
 )
 
 TIME_ZONE = "Asia/Tashkent"
