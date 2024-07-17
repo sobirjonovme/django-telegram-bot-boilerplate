@@ -3,21 +3,19 @@
 """
 import os
 from queue import Queue
-from telegram.ext import (
-    Dispatcher, Filters,
-    CommandHandler, MessageHandler,
-    CallbackQueryHandler, ConversationHandler, PicklePersistence,
-)
 
 from django.conf import settings
-from apps.tgbot.handlers.registration.manage_data import SECRET_LEVEL_BUTTON
+from telegram.ext import (CallbackQueryHandler, CommandHandler,
+                          ConversationHandler, Dispatcher, Filters,
+                          MessageHandler, PicklePersistence)
 
-from apps.tgbot.handlers.utils import files, error
-from apps.tgbot.handlers.utils.states import state
-from apps.tgbot.handlers.registration.handlers import (
-    command_start, set_full_name, set_phone_number
-)
+from apps.tgbot.handlers.registration.handlers import (command_start,
+                                                       set_full_name,
+                                                       set_phone_number)
+# from apps.tgbot.handlers.registration.manage_data import SECRET_LEVEL_BUTTON
 from apps.tgbot.handlers.subscription.handlers import check_user_subscription
+# from apps.tgbot.handlers.utils import error, files
+from apps.tgbot.handlers.utils.states import state
 from apps.tgbot.main import bot
 
 
@@ -45,6 +43,7 @@ def setup_dispatcher(dp):
         fallbacks=fallbacks,
         name="conversation_handler",
         persistent=True,
+        allow_reentry=True,
     )
 
     # registration
@@ -87,7 +86,10 @@ if not os.path.exists(os.path.join(settings.BASE_DIR, "media", "state_record")):
 
 persistence = PicklePersistence(
     filename=os.path.join(
-        settings.BASE_DIR, "media", "state_record", "conversationbot"
+        settings.BASE_DIR,
+        "media",
+        "state_record",
+        "conversationbot"
         # settings.BASE_DIR, "media", "conversationbot"
     )
 )
@@ -95,11 +97,5 @@ queue = Queue()
 
 n_workers = 1 if settings.DEBUG else 4
 dispatcher = setup_dispatcher(
-    Dispatcher(
-        bot,
-        update_queue=queue,
-        workers=n_workers,
-        use_context=True,
-        persistence=persistence
-    )
+    Dispatcher(bot, update_queue=queue, workers=n_workers, use_context=True, persistence=persistence)
 )
