@@ -6,7 +6,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path('bot/', include("apps.tgbot.urls")),
+    path("bot/", include("apps.tgbot.urls")),
 ]
 
 

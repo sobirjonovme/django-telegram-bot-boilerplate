@@ -1,27 +1,29 @@
 import json
 import logging
-from telegram import Update
-from django.views import View
-from django.http import JsonResponse, HttpResponse
-from django.conf import settings
 
+from django.conf import settings
+from django.http import HttpResponse, JsonResponse
+from django.views import View
+from telegram import Update
+
+from apps.tgbot.bot_application import application
 from core.celery import app
-from apps.tgbot.dispatcher import dispatcher
-from apps.tgbot.main import bot
 
 logger = logging.getLogger(__name__)
 
 
 @app.task(ignore_result=True)
-def process_telegram_event(update_json):
-    update = Update.de_json(update_json, bot)
-    dispatcher.process_update(update)
+async def process_telegram_event(update_json):
+
+    async with application:
+        update = Update.de_json(update_json, application.bot)
+        await application.process_update(update)
 
 
+# WARNING: if fail - Telegram webhook will be delivered again.
+# Can be fixed with async celery task execution
 class TelegramBotWebhookView(View):
-    # WARNING: if fail - Telegram webhook will be delivered again.
-    # Can be fixed with async celery task execution
-    def post(self, request, *args, **kwargs):
+    async def post(self, request, *args, **kwargs):
         bot_secret_key = request.headers.get("X-Telegram-Bot-Api-Secret-Token")
         if bot_secret_key != settings.BOT_SECRET_KEY:
             return HttpResponse(status=400)
@@ -32,10 +34,9 @@ class TelegramBotWebhookView(View):
             # Locally, You can run all of these services via docker-compose.yml
             process_telegram_event.delay(json.loads(request.body))
         else:
-            process_telegram_event(json.loads(request.body))
+            await process_telegram_event(json.loads(request.body))
 
-        # e.g. remove buttons, typing event
         return JsonResponse({"ok": "POST request processed"})
 
-    def get(self, request, *args, **kwargs):  # for debug
+    async def get(self, request, *args, **kwargs):  # for debug
         return JsonResponse({"ok": "Get request received! But nothing done"})
