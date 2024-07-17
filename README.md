@@ -9,6 +9,9 @@
 Django + python-telegram-bot + Postgres + Celery + Redis + Docker template. Production-ready Telegram bot with database, admin panel and a bunch of useful built-in methods.
 
 
+### <span style="color:#035c02"> If you want synchronous version of this boilerplate, check out [sync_version](https://github.com/sobirjonovme/django-telegram-bot-boilerplate/tree/sync_version) branch. </span>
+
+
 ## Features
 
 * Database: PostgreSQL, Sqlite3, MySQL - you decide! (default is Postgres)
