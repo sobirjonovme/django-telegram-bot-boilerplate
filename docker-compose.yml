@@ -1,77 +1,59 @@
-version: "3.8"
-
 services:
   db:
-    image: postgres:12
-    container_name: dtb_postgres
-    restart: always
+    image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    env_file:
-      - ./.env
-    ports:
-      - "5433:5432"
-  redis:
-    image: redis:alpine
-    container_name: dtb_redis
-  web:
-    build:
-      context: .
-      dockerfile: LocalDockerfile
-    container_name: dtb_django
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PORT=${DB_PORT}
     restart: always
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  web: &web
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    entrypoint: /home/app/web/entrypoints/entrypoint-web.sh
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:${WEB_PORT} --workers=4
+    security_opt:
+      - seccomp:unconfined
     volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
+      - ./static:/home/app/web/static
+      - ./media:/home/app/web/media
+      - ./locale:/home/app/web/locale
     env_file:
-      - ./.env
+      - .env
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
     depends_on:
       - db
-  bot:
-    build:
-      context: .
-      dockerfile: LocalDockerfile
-    container_name: dtb_bot
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  celery-worker:
     restart: always
-    command: python run_polling.py
-    env_file:
-      - ./.env
-    depends_on:
-      - web
-  celery:
     build:
-      context: .
-      dockerfile: LocalDockerfile
-    container_name: dtb_celery
-    restart: always
-    command: celery -A dtb worker --loglevel=INFO
+      context: ./
+      dockerfile: Dockerfile
+    entrypoint: /home/app/web/entrypoints/entrypoint-celery.sh
+    command: celery -A core worker --beat --scheduler django --loglevel=info
     volumes:
-      - .:/code
+      - ./:/app
     env_file:
-      - ./.env
+      - .env
     depends_on:
-      - redis
       - web
-  celery-beat:
-    build:
-      context: .
-      dockerfile: LocalDockerfile
-    container_name: dtb_beat
+      - redis
+      - db
+
+  redis:
+    image: redis:5.0
     restart: always
-    command: celery -A dtb beat -l info --scheduler django_celery_beat.schedulers.DatabaseScheduler
-    volumes:
-      - .:/code
-    env_file:
-      - ./.env
-    depends_on:
-      - redis
-      - celery
-      - web
 
 volumes:
   postgres_data:
