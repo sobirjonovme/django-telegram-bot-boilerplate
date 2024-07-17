@@ -16,21 +16,10 @@ from apps.tgbot.handlers.subscription.handlers import check_user_subscription
 from apps.tgbot.handlers.utils.states import state
 
 
-def setup_application():
+def setup_application(app):
     """
     Adding handlers for events from Telegram
     """
-    if not os.path.exists(os.path.join(settings.BASE_DIR, "media")):
-        os.makedirs(os.path.join(settings.BASE_DIR, "media"))
-
-    if not os.path.exists(os.path.join(settings.BASE_DIR, "media", "state_record")):
-        os.makedirs(os.path.join(settings.BASE_DIR, "media", "state_record"))
-
-    persistence = PicklePersistence(
-        filepath=os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot")
-    )
-
-    app = Application.builder().token(settings.BOT_TOKEN).updater(None).persistence(persistence).build()
 
     states = {
         state.FULL_NAME: [MessageHandler(filters.TEXT, set_full_name)],
@@ -86,4 +75,14 @@ def setup_application():
     return app
 
 
-application = setup_application()
+if not os.path.exists(os.path.join(settings.BASE_DIR, "media")):
+    os.makedirs(os.path.join(settings.BASE_DIR, "media"))
+
+if not os.path.exists(os.path.join(settings.BASE_DIR, "media", "state_record")):
+    os.makedirs(os.path.join(settings.BASE_DIR, "media", "state_record"))
+
+persistence = PicklePersistence(filepath=os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot"))
+
+application = Application.builder().token(settings.BOT_TOKEN).updater(None).persistence(persistence).build()
+
+setup_application(application)

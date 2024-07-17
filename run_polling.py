@@ -1,20 +1,19 @@
 import os
-import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+import django
+from telegram import Update
+from telegram.ext import Application, PicklePersistence
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from telegram import Bot
-from telegram.ext import Updater, PicklePersistence
-
-
 from django.conf import settings
-from apps.tgbot.dispatcher import setup_dispatcher
+
+from apps.tgbot.bot_application import setup_application
 
 
-def run_polling(tg_token: str = settings.BOT_TOKEN):
-    """ Run bot in polling mode """
-    updater = Updater(tg_token, use_context=True)
+def run_polling():
+    """Run bot in polling mode"""
 
     if not os.path.exists(os.path.join(settings.BASE_DIR, "media")):
         os.makedirs(os.path.join(settings.BASE_DIR, "media"))
@@ -23,27 +22,17 @@ def run_polling(tg_token: str = settings.BOT_TOKEN):
         os.makedirs(os.path.join(settings.BASE_DIR, "media", "state_record"))
 
     persistence = PicklePersistence(
-        filename=os.path.join(
-            settings.BASE_DIR, "media", "state_record", "conversationbot"
-            # settings.BASE_DIR, "media", "conversationbot"
-        )
+        filepath=os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot")
     )
 
-    dp = updater.dispatcher
-    dp.persistence = persistence
-    dp = setup_dispatcher(dp)
+    application = Application.builder().token(settings.BOT_TOKEN).persistence(persistence).build()
 
-    bot = Bot(tg_token)
-    bot_info = bot.get_me()
-    bot_link = f"https://t.me/{bot_info['username']}"
+    setup_application(application)
 
-    print(f"Polling of '{bot_link}' has started")
-    # it is really useful to send '👋' emoji to developer
-    # when you run local test
-    bot.send_message(text='👋', chat_id=1039835085)
+    # write successful start message in Green to the console
+    print("\033[92m👋 Bot started successfully....\033[0m")
 
-    updater.start_polling()
-    updater.idle()
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
 if __name__ == "__main__":
